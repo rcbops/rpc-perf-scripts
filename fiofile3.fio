@@ -1,0 +1,11 @@
+[global]
+ioengine=libaio
+runtime=1m
+direct=1
+blocksize=4k
+iodepth=1
+size=20g
+
+[file1]
+
+rwmixread=80
