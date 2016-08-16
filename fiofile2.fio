@@ -1,0 +1,10 @@
+[global]
+ioengine=libaio
+runtime=1m
+direct=1
+bs=4k
+iodepth=1
+size=20g
+
+[job1]
+rw=write
