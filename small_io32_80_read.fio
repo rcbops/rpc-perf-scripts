@@ -1,0 +1,13 @@
+[global]
+ioengine=libaio
+time_based
+runtime=5m
+direct=1
+
+[small-random-read-8020-4k-iodepth-32]
+rw=randread
+rwmixwrite=80
+random_distribution=pareto:0.9
+blocksize=4k
+size=250g
+iodepth=32

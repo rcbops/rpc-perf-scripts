@@ -1,6 +1,6 @@
 [global]
 ioengine=libaio
-runtime=1m
+runtime=5m
 direct=1
 bs=4k
 iodepth=1

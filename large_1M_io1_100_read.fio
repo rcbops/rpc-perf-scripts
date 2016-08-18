@@ -1,0 +1,13 @@
+[global]
+ioengine=libaio
+time_based
+runtime=5m
+direct=1
+
+[large-random-read-128k-iodepth-1]
+rw=randread
+rwmixread=100
+random_distribution=pareto:0.9
+blocksize=1M
+size=250g
+iodepth=1
