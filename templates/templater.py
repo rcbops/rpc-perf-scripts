@@ -1,5 +1,6 @@
 import jinja2
 import time
+import datetime
 
 
 SCENARIOS = {
@@ -58,12 +59,14 @@ iodepth={{iodepth}}
 {%- endfor %}
 """
 
-  job_file_template = Template(JOB_FILE_TEMPLATE)
+  job_file_template = jinja2.Template(JOB_FILE_TEMPLATE)
 
-  job_file_template.render(
-      runtime=5m,
-      filename=datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S'),
-      blocksizes=[4k, 128k, 1M]
+  string = str(job_file_template.render(
+      runtime="5m",
+      filename=datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d_%H:%M:%S'),
+      blocksizes=["4k", "128k", "1M"]
       scenarios=SCENARIOS
       iodepths=[1, 32]))
+
+  print(string)
 
