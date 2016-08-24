@@ -1,0 +1,9 @@
+{
+	"ram": 25,
+	"blocksizes": ["4k", "128k"],
+	"iodepths": [1, 32],
+	"rwmixs": [100, 80, 60],
+	"rwkind": "randread",
+	"rwmix_type": "rwmixwrite",
+	"filename": "fiofile"
+}
