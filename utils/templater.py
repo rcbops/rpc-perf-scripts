@@ -44,7 +44,7 @@ def render_fio_job(job_file_template, config_file_params,
     return fio_job
 
 
-def write_fio_job(fio_job):
+def write_fio_job(filename, fio_job):
     with open(filename, 'wt') as f:
         f.write(fio_job + "\n")
 
@@ -63,7 +63,7 @@ def create_fio_job_files(config_file=None):
                 fio_job = render_fio_job(job_file_template,
                                          config_file_params, blocksize,
                                          size, rwmix, iodepth)
-                write_fio_job(fio_job)
+                write_fio_job(filename, fio_job)
 
-if '__main__' == __name__:
+if __name__ == '__main__':
     create_fio_job_files()
