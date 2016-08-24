@@ -22,39 +22,48 @@ blocksize={{blocksize}}
 iodepth={{iodepth}}
 """
 
-def config_file_parser(config_file_name):
+
+def parse_config_file(config_file_name):
     with open(config_file_name) as data_file:
         data = json.load(data_file)
         return(data)
 
 
-def render_function(filename, job_file_template, config_file_params,
-                    blocksize, size, rwmix, iodepth):
+def render_fio_job(job_file_template, config_file_params,
+                   blocksize, size, rwmix, iodepth):
+    fio_job = str(job_file_template.render(
+      runtime='5m',
+      filename=datetime.datetime
+              .fromtimestamp(time.time())
+              .strftime('%Y-%m-%d_%H:%M:%S'),
+      blocksize=blocksize,
+      size=size,
+      rwkind=config_file_params['rwkind'],
+      rwmixwrite=rwmix,
+      iodepth=iodepth))
+    return fio_job
+
+
+def write_fio_job(fio_job):
     with open(filename, 'wt') as f:
-                    string = str(job_file_template.render(
-                      runtime='5m',
-                      filename=datetime.datetime
-                              .fromtimestamp(time.time())
-                              .strftime('%Y-%m-%d_%H:%M:%S'),
-                      blocksize=blocksize,
-                      size=size,
-                      rwkind=config_file_params['rwkind'],
-                      rwmixwrite=rwmix,
-                      iodepth=iodepth))
-                    f.write(string + "\n")
+        f.write(fio_job + "\n")
 
 
-def template_creator(config_file=None):
+def create_fio_job_files(config_file=None):
     if config_file is None:
         config_file = 'default_config_file.json'
     job_file_template = jinja2.Template(JOB_FILE_TEMPLATE)
-    config_file_params = config_file_parser(config_file)
+    config_file_params = parse_config_file(config_file)
     size = ''.join((str(10*config_file_params['ram']), 'g'))
     for blocksize in config_file_params['blocksizes']:
         for iodepth in config_file_params['iodepths']:
             for rwmix in config_file_params['rwmixs']:
                 filename = '%s_%s_%s_%s.fio' % (config_file_params['filename'],
                                                 blocksize, iodepth, rwmix)
-                render_function(filename, job_file_template,
-                                config_file_params, blocksize,
-                                size, rwmix, iodepth)
+                fio_job = render_fio_job(job_file_template,
+                                         config_file_params, blocksize,
+                                         size, rwmix, iodepth)
+                write_fio_job(fio_job)
+
+if '__main__' == __name__:
+    create_fio_job_files()
