@@ -39,11 +39,11 @@ iodepth={{iodepth}}
 """
 
 
-def templates(ram=25, blocksizes=["4k"], iodepths=[1], rwmixs=[100],
-              rwkind="randread", rwmix_type="rwmixread", filename_input=None):
+def templates(ram=25, blocksizes=['4k'], iodepths=[1], rwmixs=[100],
+              rwkind='randread', rwmix_type='rwmixread', filename_input=None):
     if filename_input is None:
-        filename_input = "myfile"
-    if rwmix_type == "rwmixread":
+        filename_input = 'myfile'
+    if rwmix_type == 'rwmixread':
         job_file_template = jinja2.Template(JOB_FILE_TEMPLATE_READ)
     else:
         job_file_template = jinja2.Template(JOB_FILE_TEMPLATE_WRITE)
@@ -54,9 +54,9 @@ def templates(ram=25, blocksizes=["4k"], iodepths=[1], rwmixs=[100],
                 filename = '%s_%s_%s_%s.txt' % (filename_input,
                                                 blocksize, iodepth, rwmix)
                 with open(filename, 'wt') as f:
-                    if rwmix_type == "rwmixread":
+                    if rwmix_type == 'rwmixread':
                         string = str(job_file_template.render(
-                          runtime="5m",
+                          runtime='5m',
                           filename=datetime.datetime
                                   .fromtimestamp(time.time())
                                   .strftime('%Y-%m-%d_%H:%M:%S'),
@@ -67,7 +67,7 @@ def templates(ram=25, blocksizes=["4k"], iodepths=[1], rwmixs=[100],
                           iodepth=iodepth))
                     else:
                         string = str(job_file_template.render(
-                          runtime="5m",
+                          runtime='5m',
                           filename=datetime.datetime
                                   .fromtimestamp(time.time())
                                   .strftime('%Y-%m-%d_%H:%M:%S'),
@@ -78,5 +78,5 @@ def templates(ram=25, blocksizes=["4k"], iodepths=[1], rwmixs=[100],
                           iodepth=iodepth))
                     f.write(string + "\n")
 
-#templates(25, ["4k", "128k", "1M"], [1, 32], [100, 80, 60], "randwrite", "rwmixwrite", "hello")
+#templates(25, ['4k', '128k', '1M'], [1, 32], [100, 80, 60], 'randwrite', 'rwmixwrite', 'hello')
 templates()
