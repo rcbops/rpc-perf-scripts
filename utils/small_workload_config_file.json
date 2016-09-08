@@ -1,0 +1,9 @@
+{
+	"ram": 25,
+	"blocksizes": ["4k"],
+	"iodepths": [1, 32],
+	"rwmixs": [0, 100, 20, 40],
+	"rwkind": "randwrite",
+	"rwmix_type": "rwmixwrite",
+	"filename": "default"
+}

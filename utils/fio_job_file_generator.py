@@ -2,6 +2,8 @@ import jinja2
 import time
 import datetime
 import json
+import os
+import shutil
 from pprint import pprint
 
 
@@ -13,7 +15,6 @@ random_distribution=pareto:0.9
 size={{size}}
 time_based
 runtime={{runtime}}
-filename={{filename}}
 
 [rw-{{rwkind}}-iodepth-{{iodepth}}-blocksize-{{blocksize}}]
 rw={{rwkind}}
@@ -33,9 +34,6 @@ def render_fio_job(job_file_template, config_file_params,
                    blocksize, size, rwmix, iodepth):
     fio_job = str(job_file_template.render(
       runtime='5m',
-      filename=datetime.datetime
-              .fromtimestamp(time.time())
-              .strftime('%Y-%m-%d_%H:%M:%S'),
       blocksize=blocksize,
       size=size,
       rwkind=config_file_params['rwkind'],
@@ -44,14 +42,20 @@ def render_fio_job(job_file_template, config_file_params,
     return fio_job
 
 
-def write_fio_job(filename, fio_job):
-    with open(filename, 'wt') as f:
+def write_fio_job(filename, fio_job, path):
+    with open(os.path.join(path, filename), 'wt') as f:
         f.write(fio_job + "\n")
 
 
 def create_fio_job_files(config_file=None):
+    path = 'generated_fio_files'
+    if not os.path.exists(path):
+        os.makedirs(path)
+    else:
+        shutil.rmtree(path)
+        os.makedirs(path)
     if config_file is None:
-        config_file = 'default_config_file.json'
+        config_file = 'config_file.json'
     job_file_template = jinja2.Template(JOB_FILE_TEMPLATE)
     config_file_params = parse_config_file(config_file)
     size = ''.join((str(10*config_file_params['ram']), 'g'))
@@ -63,7 +67,7 @@ def create_fio_job_files(config_file=None):
                 fio_job = render_fio_job(job_file_template,
                                          config_file_params, blocksize,
                                          size, rwmix, iodepth)
-                write_fio_job(filename, fio_job)
+                write_fio_job(filename, fio_job, path)
 
 if __name__ == '__main__':
     create_fio_job_files()
