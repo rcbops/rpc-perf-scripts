@@ -9,18 +9,16 @@ else
 	python fio_job_file_generator.py CONFIG_FILE
 	for file in generated_fio_files/*
 	    do
-	    for vm in $(seq 1 $vms)
+	    for vm in $(seq 1 $VMS)
 	    	do
+            UNIQUE_RUN_ID=`cat /dev/urandom | env LC_CTYPE=C tr -cd 'a-f0-9' | head -c 8`
 		    pkb --benchmarks=fio \
+            --run_uri=$UNIQUE_RUN_ID
 		    --num_vms=$vm \
 		    --benchmark_config_file=fio.yaml \
 		    --fio_jobfile=generated_fio_files/"$file".fio
-		    if [ -d "$DIRECTORY" ]; then
-		    	mv tbd_path $OUT_DIRECTORY/
-		    else
-		    	mkdir $OUT_DIRECTORY
-		    	mv tbd_path $OUT_DIRECTORY/
-		    fi
+            mkdir $HOME/$OUT_DIRECTORY
+		    cp -r /tmp/perfkitbenchmarker/runs/$UNIQUE_RUN_ID $HOME/$OUT_DIRECTORY
 		done
 	done
 fi
