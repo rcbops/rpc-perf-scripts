@@ -5,4 +5,4 @@ fio:
     image: '05c07bf1-59be-453a-b9d7-dd4dcc28a6b8'
     openstack_network: private
     openstack_floating_ip_pool: public
-    openstack_volume_size: 500
+    openstack_volume_size: 50
