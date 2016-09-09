@@ -18,7 +18,7 @@ else
 		    --benchmark_config_file=fio.yaml \
 		    --fio_jobfile=generated_fio_files/"$file".fio
             mkdir $HOME/$OUT_DIRECTORY
-		    cp -r /tmp/perfkitbenchmarker/runs/$UNIQUE_RUN_ID $HOME/$OUT_DIRECTORY
+		    cp -r $HOME/tmp/perfkitbenchmarker/runs/$UNIQUE_RUN_ID $HOME/$OUT_DIRECTORY
 		done
 	done
 fi
