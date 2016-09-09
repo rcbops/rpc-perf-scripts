@@ -8,20 +8,20 @@ if [ $# -lt 3 ]
 else
 	python fio_job_file_generator.py $CONFIG_FILE
 	for file in generated_fio_files/*
-	    do
-	    for vm in $(seq 1 $VMS)
-	    	do
-            UNIQUE_RUN_ID=`cat /dev/urandom | env LC_CTYPE=C tr -cd 'a-f0-9' | head -c 8`
-		    ./pkb.py --benchmarks=fio \
-            --run_uri=$UNIQUE_RUN_ID \
-		    --num_vms=$vm \
-		    --benchmark_config_file=pkb_fio_flags.yaml \
-		    --fio_jobfile=generated_fio_files/"$file".fio
-		    if [ ! -d "$HOME/$OUT_DIRECTORY" ]; then
-            	mkdir $HOME/$OUT_DIRECTORY
-            else
-		    	cp -r $HOME/tmp/perfkitbenchmarker/runs/$UNIQUE_RUN_ID $HOME/$OUT_DIRECTORY
-		    fi
+		do
+		for vm in $(seq 1 $VMS)
+			do
+			UNIQUE_RUN_ID=`cat /dev/urandom | env LC_CTYPE=C tr -cd 'a-f0-9' | head -c 8`
+			./pkb.py --benchmarks=fio \
+			--run_uri=$UNIQUE_RUN_ID \
+			--num_vms=$vm \
+			--benchmark_config_file=pkb_fio_flags.yaml \
+			--fio_jobfile="$file"
+			if [ ! -d "$HOME/$OUT_DIRECTORY" ]; then
+				mkdir $HOME/$OUT_DIRECTORY
+			else
+				cp -r $HOME/tmp/perfkitbenchmarker/runs/$UNIQUE_RUN_ID $HOME/$OUT_DIRECTORY
+			fi
 		done
 	done
 fi
