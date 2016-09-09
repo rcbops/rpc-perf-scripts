@@ -13,7 +13,7 @@ else
 	    	do
             UNIQUE_RUN_ID=`cat /dev/urandom | env LC_CTYPE=C tr -cd 'a-f0-9' | head -c 8`
 		    ./pkb --benchmarks=fio \
-            --run_uri=$UNIQUE_RUN_ID
+            --run_uri=$UNIQUE_RUN_ID \
 		    --num_vms=$vm \
 		    --benchmark_config_file=pkb_fio_flags.yaml \
 		    --fio_jobfile=generated_fio_files/"$file".fio
