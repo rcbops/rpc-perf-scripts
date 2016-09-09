@@ -12,13 +12,16 @@ else
 	    for vm in $(seq 1 $VMS)
 	    	do
             UNIQUE_RUN_ID=`cat /dev/urandom | env LC_CTYPE=C tr -cd 'a-f0-9' | head -c 8`
-		    pkb --benchmarks=fio \
+		    ./pkb --benchmarks=fio \
             --run_uri=$UNIQUE_RUN_ID
 		    --num_vms=$vm \
 		    --benchmark_config_file=pkb_fio_flags.yaml \
 		    --fio_jobfile=generated_fio_files/"$file".fio
-            mkdir $HOME/$OUT_DIRECTORY
-		    cp -r $HOME/tmp/perfkitbenchmarker/runs/$UNIQUE_RUN_ID $HOME/$OUT_DIRECTORY
+		    if [ ! -d "$HOME/$OUT_DIRECTORY" ]; then
+            	mkdir $HOME/$OUT_DIRECTORY
+            else
+		    	cp -r $HOME/tmp/perfkitbenchmarker/runs/$UNIQUE_RUN_ID $HOME/$OUT_DIRECTORY
+		    fi
 		done
 	done
 fi
