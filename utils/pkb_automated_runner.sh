@@ -15,7 +15,7 @@ else
 		    pkb --benchmarks=fio \
             --run_uri=$UNIQUE_RUN_ID
 		    --num_vms=$vm \
-		    --benchmark_config_file=fio.yaml \
+		    --benchmark_config_file=pkb_fio_flags.yaml \
 		    --fio_jobfile=generated_fio_files/"$file".fio
             mkdir $HOME/$OUT_DIRECTORY
 		    cp -r $HOME/tmp/perfkitbenchmarker/runs/$UNIQUE_RUN_ID $HOME/$OUT_DIRECTORY
