@@ -6,7 +6,7 @@ if [ $# -lt 3 ]
 	then
 		echo "Too few arguments supplied, should be in format [vms, output directory, config file]"
 else
-	python fio_job_file_generator.py CONFIG_FILE
+	python fio_job_file_generator.py $CONFIG_FILE
 	for file in generated_fio_files/*
 	    do
 	    for vm in $(seq 1 $VMS)
