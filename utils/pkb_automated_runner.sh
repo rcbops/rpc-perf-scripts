@@ -12,7 +12,7 @@ else
 	    for vm in $(seq 1 $VMS)
 	    	do
             UNIQUE_RUN_ID=`cat /dev/urandom | env LC_CTYPE=C tr -cd 'a-f0-9' | head -c 8`
-		    ./pkb --benchmarks=fio \
+		    ./pkb.py --benchmarks=fio \
             --run_uri=$UNIQUE_RUN_ID \
 		    --num_vms=$vm \
 		    --benchmark_config_file=pkb_fio_flags.yaml \
