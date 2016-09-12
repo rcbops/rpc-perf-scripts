@@ -1,5 +1,5 @@
 {
-	"ram": 4,
+	"ram": 20,
 	"blocksizes": ["4k"],
 	"iodepths": [1, 32],
 	"rwmixs": [0, 100, 20, 40],
