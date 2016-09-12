@@ -4,6 +4,7 @@ import datetime
 import json
 import os
 import shutil
+import sys
 from pprint import pprint
 
 
@@ -70,4 +71,4 @@ def create_fio_job_files(config_file=None):
                 write_fio_job(filename, fio_job, path)
 
 if __name__ == '__main__':
-    create_fio_job_files()
+    create_fio_job_files(sys.argv[1])
