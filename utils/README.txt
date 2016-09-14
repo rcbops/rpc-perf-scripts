@@ -15,5 +15,6 @@ There are four main types of files contained in the rpc-perf-scripts repo:
 	* This is a python script that takes in a JSON config file (if no config file passed in, it uses the default config file). Then it generates fio job files based on the passed in config file. It then puts all of these fio files in a folder called generated_fio_jobs. This folder is deleted at the start of every run.
 * PKB Fio Flags (pkb_fio_flags.yaml):
 	* This is a simple way of specifying the flags that PKB requires to run a fio job on an Openstack infrastructure, e.g. image ID for the desired server, volume size, etc.
-*Perfkit Benchamarker runner (pkb_automated_runner.sh):
-	*Takes in the number of vms, desired output directory for the fio results,  JSON config, and (this is optional) path to pkb.py. It then generates all the config files by calling the Perfkit Benchamarker runner with the PKB fio flags file and the passed in config file. It then runs all the fio jobs that were generated with the number of vms specified. 
+* Perfkit Benchamarker runner (pkb_automated_runner.sh):
+	* This is the **main** file that is run when wanting to run PKB for fio in an automated way. This file runs all the above files. 
+	* Takes in the number of vms, desired output directory for the fio results,  JSON config, and (this is optional) path to pkb.py. It then generates all the config files by calling the Perfkit Benchamarker runner with the PKB fio flags file and the passed in config file. It then runs all the fio jobs that were generated with the number of vms specified. 
