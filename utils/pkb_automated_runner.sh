@@ -3,7 +3,7 @@
 VMS="$1"
 OUT_DIRECTORY="$2"
 CONFIG_FILE="$3"
-DEFAULT_PKB_PATH="/opt/PerfKitBenchmarker/"
+DEFAULT_PKB_PATH="/opt/PerfKitBenchmarker"
 
 PKB_PATH="${PKB_PATH:-$DEFAULT_PKB_PATH}"
 
@@ -40,10 +40,8 @@ for file in generated_fio_files/*; do
   run_ids=
   for vm in $(seq 1 "$VMS"); do
       run_ids[$vm]="$(cat /dev/urandom | env LC_CTYPE=C tr -cd 'a-f0-9' | head -c 8)"
-      run_pkb_provision "$file" "${run_ids[$vm]}" &
-      sleep $[ ( $RANDOM % 5 ) + 1 ]s  # Sleep between 1 to 5 seconds
+      run_pkb_provision "$file" "${run_ids[$vm]}"
   done
-  wait
   for vm in $(seq 1 "$VMS"); do
       run_pkb_benchmark "$file" "${run_ids[$vm]}" &
       sleep $[ ( $RANDOM % 5 ) + 1 ]s  # Sleep between 1 to 5 seconds
