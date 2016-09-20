@@ -5,5 +5,5 @@
 	"rwmixs": [0, 100],
 	"rwkind": "rw",
 	"rwmix_type": "rwmixwrite",
-	"filename": "default"
+	"filename": "large_workload"
 }
