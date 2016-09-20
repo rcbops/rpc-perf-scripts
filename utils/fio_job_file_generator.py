@@ -63,7 +63,7 @@ def create_fio_job_files(config_file=None):
     for blocksize in config_file_params['blocksizes']:
         for iodepth in config_file_params['iodepths']:
             for rwmix in config_file_params['rwmixs']:
-                filename = '%s_%s_blksz_%s_iodepth_%s_rwmix.fio' % (config_file_params['filename'],
+                filename = '%s_%s_blocksize_%s_iodepth_%s_rwmix.fio' % (config_file_params['filename'],
                                                 blocksize, iodepth, rwmix)
                 fio_job = render_fio_job(job_file_template,
                                          config_file_params, blocksize,
