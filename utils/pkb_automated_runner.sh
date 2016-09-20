@@ -18,14 +18,14 @@ function run_pkb_provision() {
 function run_pkb_benchmark() {
     local file="$1"
     local unique_run_id="$2"
-    local subdir="$3"
+    local sub_directory="$3"
     python "$PKB_PATH"/pkb.py --benchmarks=fio --run_uri="$unique_run_id" \
       --num_vms=1 --benchmark_config_file=pkb_fio_flags.yaml \
       --fio_jobfile="$file" --run_stage=run,cleanup,teardown
-    if [[ ! -d "$OUT_DIRECTORY/$subdir" ]]; then
-        mkdir -p "$OUT_DIRECTORY/$subdir"
+    if [[ ! -d "$OUT_DIRECTORY/$sub_directory" ]]; then
+        mkdir -p "$OUT_DIRECTORY/$sub_directory"
     fi
-    cp -r /tmp/perfkitbenchmarker/runs/"$unique_run_id" "$OUT_DIRECTORY/$subdir"
+    cp -r /tmp/perfkitbenchmarker/runs/"$unique_run_id" "$OUT_DIRECTORY/$sub_directory"
 }
 
 if [ $# -lt 3 ]; then
@@ -41,13 +41,13 @@ fi
 python fio_job_file_generator.py "$CONFIG_FILE"
 for file in generated_fio_files/*; do
   run_ids=
-  subdir="$(basename $file .fio)"
+  sub_directory="$(basename $file .fio)"
   for vm in $(seq 1 "$VMS"); do
       run_ids[$vm]="$(cat /dev/urandom | env LC_CTYPE=C tr -cd 'a-f0-9' | head -c 8)"
       run_pkb_provision "$file" "${run_ids[$vm]}"
   done
   for vm in $(seq 1 "$VMS"); do
-      run_pkb_benchmark "$file" "${run_ids[$vm]}" "$subdir" &
+      run_pkb_benchmark "$file" "${run_ids[$vm]}" "$sub_directory" &
       sleep $[ ( $RANDOM % 5 ) + 1 ]s  # Sleep between 1 to 5 seconds
   done
   wait
