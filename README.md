@@ -21,6 +21,7 @@ There are four main types of files contained in the rpc-perf-scripts repo:
 * Default config files (default_config.json):
 	*This is an example of the json file that contains the parameters and variables for the desired fio job you wish to create. This file is passed into the fio job generator program (referenced below).
 	* Parameters that config takes in are as follows: 
+
 		|             | Example      | Type   | Single or Multiple Params | Required |
 		|-------------|--------------|--------|---------------------------|----------|
 		| RAM         | 4            | Int    | single                    | X        |
@@ -30,6 +31,7 @@ There are four main types of files contained in the rpc-perf-scripts repo:
 		| RW kind     | "write"      | String | single                    | X        |
 		| RW mix type | "rwmixwrite" | String | single                    | X        |
 		| Filename    | "default"    | String | single                    | X        |
+		
 	* Refer to fio man pages for more information on possible inputs for these parameters.
 * Fio job generator (fio_job_file_generator.py):
 	* This is a python script that takes in a JSON config file (if no config file passed in, it uses the default config file). Then it generates fio job files based on the passed in config file. It then puts all of these fio files in a folder called generated_fio_jobs. This folder is deleted at the start of every run.
