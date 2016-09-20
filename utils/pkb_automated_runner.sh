@@ -33,11 +33,6 @@ if [ $# -lt 3 ]; then
   exit -1
 fi
 
-if [[ ! -d "$OUT_DIRECTORY" ]]; then
-  mkdir -p "$OUT_DIRECTORY"
-fi
-
-
 python fio_job_file_generator.py "$CONFIG_FILE"
 for file in generated_fio_files/*; do
   run_ids=
