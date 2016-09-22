@@ -41,15 +41,15 @@ There are four main types of files contained in the rpc-perf-scripts repo:
 	*This is an example of the json file that contains the parameters and variables for the desired fio job you wish to create. This file is passed into the fio job generator program (referenced below).
 	* Parameters that config takes in are as follows: 
 
-		|             | Example      | Type            | Required |
-		|-------------|--------------|-----------------|----------|
-		| RAM         | 4            | Int             | X        |
-		| Blocksizes  | ["4k"]       | List of Strings | X        |
-		| IO depths   | [1, 32]      | List of Ints    | X        |
-		| RW mixs     | [100]        | List of Ints    | X        |
-		| RW kind     | "write"      | String          | X        |
-		| RW mix type | "rwmixwrite" | String          | X        |
-		| Filename    | "default"    | String          | X        |
+|             | Example      | Type            | Required |
+|-------------|--------------|-----------------|----------|
+| RAM         | 4            | Int             | X        |
+| Blocksizes  | ["4k"]       | List of Strings | X        |
+| IO depths   | [1, 32]      | List of Ints    | X        |
+| RW mixs     | [100]        | List of Ints    | X        |
+| RW kind     | "write"      | String          | X        |
+| RW mix type | "rwmixwrite" | String          | X        |
+| Filename    | "default"    | String          | X        |
 		
 	* Refer to fio man pages for more information on possible inputs for these parameters.
 * Fio job generator (fio_job_file_generator.py):
