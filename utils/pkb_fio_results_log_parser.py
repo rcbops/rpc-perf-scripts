@@ -16,23 +16,23 @@ def find_pkb_logs():
     return list_of_files
 
 
-def consolodated_log(log_file):
+def consolidated_log(log_file):
 
     # summarizes individual log file by only extracting relevant section
     # and returns said relevant section
-    consolodated_log = subprocess.Popen(
+    consolidated_log = subprocess.Popen(
                      ['sed',
                       '/PerfKitBenchmarker Complete Results/,/p99.99/!d;//d',
                       log_file],
                      stdout=subprocess.PIPE).communicate()[0].decode('ascii')
-    return consolodated_log
+    return consolidated_log
 
 
 def find_param_value(variable, log_file):
 
     # parses summarized log file in order to find specific value, e.g. 'io'
     # and returns value of passed in variable/parameter
-    brief_log = consolodated_log(log_file)
+    brief_log = consolidated_log(log_file)
     brief_log_no_spaces = brief_log.split()
     brief_log_no_commas = ([s.replace(',', '') for s in brief_log_no_spaces])
     brief_log_no_colons = ([s.replace(':', '') for s in brief_log_no_commas])

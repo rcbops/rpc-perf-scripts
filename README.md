@@ -6,7 +6,7 @@ In order to ease running the Perfkit Benchmarker Fio Benchmark on Openstack, we 
 
 ## Quick Start
 
-In order to quickly run the automation sutie (with the default fio config parameters) all you need to do is issue the following command:
+In order to quickly run the automation suite (with the default fio config parameters) all you need to do is issue the following command:
 
 ```sh
 pkb_automated_runner.sh <desired_num_vms> <desired_output_directory> [json_config_file]
@@ -52,11 +52,11 @@ There are four main types of files contained in the rpc-perf-scripts repo:
 		
 * Refer to fio man pages for more information on possible inputs for these parameters.
 * Fio job generator (fio_job_file_generator.py):
-	* This is a python script that takes in a JSON config file (if no config file passed in, it uses the default config file). Then it generates fio job files based on the passed in config file. It then puts all of these fio files in a folder called generated_fio_jobs. This folder is deleted at the start of every run.
+	* This is a python script that takes in a JSON config file (if no config file is passed in, it uses the default config file). Then it generates fio job files based on the passed in config file. It then puts all of these fio files in a folder called generated_fio_jobs. This folder is deleted at the start of every run.
 * PKB Fio Flags (pkb_fio_flags.yaml):
 	* This is a simple way of specifying the flags that PKB requires to run a fio job on an Openstack infrastructure, e.g. image ID for the desired server, volume size, etc.
 * Perfkit Benchamarker runner (pkb_automated_runner.sh):
 	* This is the **main** file that is run when wanting to run PKB for fio in an automated way. This file runs all the above files. 
 	* Takes in the number of vms, desired output directory for the fio results, JSON config, and (this is optional) path to pkb.py. It then generates all the config files by calling the Perfkit Benchamarker runner with the PKB fio flags file and the passed in config file. It then runs all the fio jobs that were generated with the number of vms specified. It then takes the output of the fio runs and puts them into the user specified desired output directory location. The results and output of the fio runs are structured into files based on the name of the fio generated job file.
 * Perfkit Benchmarker Log Parser (pkb_fio_results_log_parser.py):
-    * This program parses pkb fio results and creating a subsequent CSV file that has the important data from the parsedf logs. No input parameter is required. This file works by being called in the directory of the desired workload one wishes to create a summarized CSV file for. It works from the directory it is run in and will parse all logs from the directory that it is run in downwards. It will then output the results into a csv file with the directory its run in's name. The CSV contains the io, rwmixwrite, mean bandwith, mean latency, median latency, and 99th percentile latency values.
+    * This program parses pkb fio results and creating a subsequent CSV file that has the important data from the parsed logs. No input parameter is required. This file works by being called in the directory of the desired workload one wishes to create a summarized CSV file for. It works from the directory it is run in and will parse all logs from the directory that it is run in downwards. It will then output the results into a csv file with the name of the directory from which it was run. The CSV contains the io, rwmixwrite, mean bandwith, mean latency, median latency, and 99th percentile latency values.
