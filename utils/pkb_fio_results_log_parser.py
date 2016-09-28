@@ -7,9 +7,12 @@ import pathlib
 
 
 def find_pkb_json_logs():
+    """Find all pkb json log files.
 
-    # finds all the pkb log files in all subsequent directories
-    # and returns these logs as a list
+    Finds all the pkb log files in all subsequent directories
+    and returns these logs as a list.
+
+    """
     list_of_files = []
     for dirpath, dirs, files in os.walk(os.getcwd()):
         for filename in fnmatch.filter(files, '*.json'):
@@ -18,50 +21,63 @@ def find_pkb_json_logs():
 
 
 def json_file_consolidator(log_file):
+    """Retrives first two lines of json file.
 
-    # grabs first two lines of the json file,
-    # as these are the only lines that contain the data
-    # we care about. This function returns an array of the
-    # two json lines we care about
+    Grabs first two lines of the json file,
+    as these are the only lines that contain the data
+    we care about. This function returns an array of the
+    two json lines we care about.
+
+    """
     data = []
-    with open(log_file) as f:
-        lines_after_2 = f.readlines()[:2]
+    with open(log_file) as filename:
+        lines_after_2 = filename.readlines()[:2]
         for line in lines_after_2:
             data.append(json.loads(line))
         return data
 
 
 def parse_labels(labels):
+    """Removes commas and seporators from labels value.
 
-    # takes in string (the value to "labels" key)and removes
-    # commas and separators. Returns dictionary of parsed input string
-    # this function was taken from https://goo.gl/rpSmtW
+    Takes in string (the value to "labels" key)and removes
+    commas and separators. Returns dictionary of parsed input string.
+    
+    This function was taken from https://goo.gl/rpSmtW.
+
+    """
     result = {}
     for item in labels.strip('|').split('|,|'):
-        k, v = item.split(':', 1)
-        result[k] = v
+        key, value = item.split(':', 1)
+        result[key] = value
     return result
 
 
 def get_labels(consolidated_log_file):
+    """Gets value associated with label key.
 
-    # calls parse_labels function on each element of the
-    # array passed in and returns an array of the dictionary value
-    # pertaining to the key "labels" for each dictionary in
-    # the passed in array
+    Calls parse_labels function on each element of the
+    array passed in and returns an array of the dictionary value
+    pertaining to the key "labels" for each dictionary in
+    the passed in array.
+
+    """
     labels = []
-    for dict in consolidated_log_file:
-        parsed_labels_info = parse_labels(dict['labels'])
+    for dict_item in consolidated_log_file:
+        parsed_labels_info = parse_labels(dict_item['labels'])
         labels.append(parsed_labels_info)
     return labels
 
 
 def find_key(parsed_labels, key):
+    """Find the value associated with the desired key.
 
-    # goes through the passed in parsed_labels dictionaries,
-    # and for each dictionary in parsed_labels checks to see if
-    # the desired key is there, if it is, it grabs the value
-    # of the key and returns it
+    Goes through the passed in parsed_labels dictionaries,
+    and for each dictionary in parsed_labels checks to see if
+    the desired key is there, if it is, it grabs the value
+    of the key and returns it.
+
+    """
     for label_value in parsed_labels:
         try:
             value = label_value[key]
@@ -71,9 +87,12 @@ def find_key(parsed_labels, key):
 
 
 def report_dict_assign_values(log_file):
+    """Assigns values to report dictionary keys.
 
-    # parse individual pkb log file for values
-    # and returns a dictionary with these values
+    Parse individual pkb log file for values
+    and returns a dictionary with these values.
+
+    """
     report_dict = {}
     consolidated_log_file = json_file_consolidator(log_file)
     parsed_labels = get_labels(consolidated_log_file)
@@ -89,7 +108,7 @@ def report_dict_assign_values(log_file):
 
 def write_to_csv():
 
-    # writes data from log files into csv with appropriate header names
+    """writes data from log files into csv with appropriate header names."""
     full_path = pathlib.Path(os.getcwd())
     parent_directory = os.path.join(*full_path.parts[-1:])
     with open(parent_directory+'.csv', 'w') as csvfile:
@@ -102,5 +121,7 @@ def write_to_csv():
             report_dict = report_dict_assign_values(log_file)
             writer.writerow(report_dict)
 
+
 if __name__ == '__main__':
+    # This will only be executed when this module is run directly.
     write_to_csv()
