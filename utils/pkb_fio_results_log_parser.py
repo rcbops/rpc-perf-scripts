@@ -97,6 +97,7 @@ def report_dict_assign_values(log_file):
     consolidated_log_file = json_file_consolidator(log_file)
     parsed_labels = get_labels(consolidated_log_file)
 
+    report_dict['blocksize'] = find_key(parsed_labels, 'blocksize')
     report_dict['io'] = find_key(parsed_labels, 'iodepth')
     report_dict['rwmixwrite'] = find_key(parsed_labels, 'rwmixwrite')
     report_dict['mean_bandwidth'] = find_key(parsed_labels, 'bw_mean')
@@ -112,8 +113,8 @@ def write_to_csv():
     full_path = pathlib.Path(os.getcwd())
     parent_directory = os.path.join(*full_path.parts[-1:])
     with open(parent_directory+'.csv', 'w') as csvfile:
-        fieldnames = ['io', 'rwmixwrite', 'mean_bandwidth', 'mean_latency',
-                      'median_latency', '99th_p_latency']
+        fieldnames = ['blocksize', 'io', 'rwmixwrite', 'mean_bandwidth',
+                      'mean_latency', 'median_latency', '99th_p_latency']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
         list_of_log_files = find_pkb_json_logs()
