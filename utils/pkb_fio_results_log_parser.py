@@ -21,18 +21,16 @@ def find_pkb_json_logs():
 
 
 def json_file_consolidator(log_file):
-    """Retrives first two lines of json file.
+    """Puts all of JSON lines into array.
 
-    Grabs first two lines of the json file,
-    as these are the only lines that contain the data
-    we care about. This function returns an array of the
-    two json lines we care about.
+    This function returns an array of the
+    JSON lines which allows us to easily parse lines.
 
     """
     data = []
     with open(log_file) as filename:
-        lines_after_2 = filename.readlines()[:2]
-        for line in lines_after_2:
+        lines = filename.readlines()
+        for line in lines:
             data.append(json.loads(line))
         return data
 
@@ -42,7 +40,7 @@ def parse_labels(labels):
 
     Takes in string (the value to "labels" key)and removes
     commas and separators. Returns dictionary of parsed input string.
-    
+
     This function was taken from https://goo.gl/rpSmtW.
 
     """
@@ -67,6 +65,20 @@ def get_labels(consolidated_log_file):
         parsed_labels_info = parse_labels(dict_item['labels'])
         labels.append(parsed_labels_info)
     return labels
+
+
+def get_iops(consolidated_log_file, job_name, read_or_write):
+    """Gets value associated with key "value".
+
+    Checks to see if "metric" key has iops as its value
+    and then if it does returns the iops.
+
+    """
+    for item in consolidated_log_file:
+        metric_value = job_name+":"+read_or_write+":iops"
+        if item['metric'] == metric_value:
+            return item['value']
+    return "NA"
 
 
 def find_key(parsed_labels, key):
@@ -97,13 +109,18 @@ def report_dict_assign_values(log_file):
     consolidated_log_file = json_file_consolidator(log_file)
     parsed_labels = get_labels(consolidated_log_file)
 
-    report_dict['blocksize'] = find_key(parsed_labels, 'blocksize')
+    job_name = find_key(parsed_labels, 'fio_job')
+    read_iops = get_iops(consolidated_log_file, job_name, "read")
+    write_iops = get_iops(consolidated_log_file, job_name, "write")
+
     report_dict['io'] = find_key(parsed_labels, 'iodepth')
     report_dict['rwmixwrite'] = find_key(parsed_labels, 'rwmixwrite')
     report_dict['mean_bandwidth'] = find_key(parsed_labels, 'bw_mean')
     report_dict['mean_latency'] = find_key(parsed_labels, 'mean')
     report_dict['median_latency'] = find_key(parsed_labels, 'p50')
     report_dict['99th_p_latency'] = find_key(parsed_labels, 'p99')
+    report_dict['read_iops'] = read_iops
+    report_dict['write_iops'] = write_iops
     return report_dict
 
 
@@ -113,8 +130,9 @@ def write_to_csv():
     full_path = pathlib.Path(os.getcwd())
     parent_directory = os.path.join(*full_path.parts[-1:])
     with open(parent_directory+'.csv', 'w') as csvfile:
-        fieldnames = ['blocksize', 'io', 'rwmixwrite', 'mean_bandwidth',
-                      'mean_latency', 'median_latency', '99th_p_latency']
+        fieldnames = ['io', 'rwmixwrite', 'mean_bandwidth', 'mean_latency',
+                      'median_latency', '99th_p_latency', 'read_iops',
+                      'write_iops']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
         list_of_log_files = find_pkb_json_logs()
